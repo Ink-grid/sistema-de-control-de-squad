@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/** @format */
+
+import React, { useContext } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { StoreContext } from './context/StoreContext';
+import Register from './views/Register';
+import Home from './views/Home';
+import Singin from './views/SingIn';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { state } = useContext(StoreContext);
+	return (
+		<BrowserRouter>
+			<Switch>
+				<Route
+					exact
+					path='/'
+					render={() => (state.login ? <Home /> : <Singin />)}
+				/>
+				<Route
+					path='/register'
+					render={() => (state.login ? <Home /> : <Register />)}
+				/>
+			</Switch>
+		</BrowserRouter>
+	);
 }
 
 export default App;
