@@ -8,7 +8,7 @@ import React, { forwardRef, useContext } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 //import { getIcons } from '../../../../../../utils/Libs';
 //import { useGet } from '../../../../../../services/useService';
 //import { StoreContext } from '../../../../../../context/StoreContext';
@@ -66,7 +66,7 @@ const SidebarNav = props => {
 
 	const classes = useStyles();
 
-	if (!data) {
+	if (data.length === 0) {
 		return (
 			<div style={{ textAlign: 'center' }}>
 				{' '}
@@ -77,7 +77,7 @@ const SidebarNav = props => {
 
 	return (
 		<List {...rest} className={clsx(classes.root, className)}>
-			{data.data.map(page => (
+			{data.map(page => (
 				<ListItem className={classes.item} disableGutters key={page.title}>
 					<Button
 						activeClassName={classes.active}

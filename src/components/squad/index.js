@@ -83,46 +83,48 @@ export default function CenteredGrid() {
 			</div>
 
 			<div className={classes.root}>
-				<Grid container spacing={4}>
-					{['nevado', 'in company', 'expro', 'hyper'].map((intens, index) => {
-						if (data && data.length > 0) {
-							let resul = data.filter(
-								e =>
-									e.iniciativa === intens && e.name === state.user.displayName
-							);
+				<Grid container spacing={2}>
+					{['nevado', 'in company', 'programacion', 'expro', 'hyper'].map(
+						(intens, index) => {
+							if (data && data.length > 0) {
+								let resul = data.filter(
+									e =>
+										e.iniciativa === intens && e.name === state.user.displayName
+								);
+
+								return (
+									<Grid item xs={4} key={index}>
+										<Link to={resul.length === 1 ? '/' : `/squad/${intens}`}>
+											<Paper
+												//onClick={() => alert(intens)}
+												elevation={3}
+												className={classes.paper}>
+												{resul.length === 1 ? (
+													<div>
+														<div>{resul[0].iniciativa}</div>
+														<div>comprometido: {resul[0].comprometido}</div>
+														<div>involucrado: {resul[0].involucrado}</div>
+													</div>
+												) : (
+													intens
+												)}
+											</Paper>
+										</Link>
+									</Grid>
+								);
+							}
 
 							return (
 								<Grid item xs={6} key={index}>
-									<Link to={resul.length === 1 ? '/' : `/squad/${intens}`}>
-										<Paper
-											//onClick={() => alert(intens)}
-											elevation={3}
-											className={classes.paper}>
-											{resul.length === 1 ? (
-												<div>
-													<div>{resul[0].iniciativa}</div>
-													<div>comprometido: {resul[0].comprometido}</div>
-													<div>involucrado: {resul[0].involucrado}</div>
-												</div>
-											) : (
-												intens
-											)}
+									<Link to={`/squad/${intens}`}>
+										<Paper elevation={3} className={classes.paper}>
+											{intens}
 										</Paper>
 									</Link>
 								</Grid>
 							);
 						}
-
-						return (
-							<Grid item xs={6} key={index}>
-								<Link to={`/squad/${intens}`}>
-									<Paper elevation={3} className={classes.paper}>
-										{intens}
-									</Paper>
-								</Link>
-							</Grid>
-						);
-					})}
+					)}
 				</Grid>
 			</div>
 		</div>

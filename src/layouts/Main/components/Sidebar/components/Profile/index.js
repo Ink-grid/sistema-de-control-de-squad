@@ -3,9 +3,9 @@
 import React, { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
-//import { StoreContext } from '../../../../../../context/StoreContext';
+import { StoreContext } from '../../../../../../context/StoreContext';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Profile = props => {
-	// const { state } = useContext(StoreContext);
+	const { state } = useContext(StoreContext);
 	const { className, ...rest } = props;
 
 	const classes = useStyles();
@@ -40,10 +40,9 @@ const Profile = props => {
 				to='/settings'
 			/>
 			<Typography className={classes.name} variant='h4'>
-				{/* {state.user.displayName} */} name
-				{/* {state.user.email} */}
+				{state.user.displayName}
 			</Typography>
-			<Typography variant='body2'> email</Typography>
+			<Typography variant='body2'> {state.user.email}</Typography>
 		</div>
 	);
 };

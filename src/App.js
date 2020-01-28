@@ -10,52 +10,52 @@ import { Main as MainLayout, Minimal as MinimalLayout } from './layouts/';
 import Singin from './views/SingIn';
 
 function App() {
-  const { state } = useContext(StoreContext);
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={() =>
-            state.login ? (
-              <MainLayout>
-                <Home />
-              </MainLayout>
-            ) : (
-              <Singin />
-            )
-          }
-        />
-        <Route
-          path="/register"
-          render={() =>
-            state.login ? (
-              <MinimalLayout>
-                <Home />
-              </MinimalLayout>
-            ) : (
-              <Register />
-            )
-          }
-        />
+	const { state } = useContext(StoreContext);
+	return (
+		<BrowserRouter>
+			<Switch>
+				<Route
+					exact
+					path='/'
+					render={() =>
+						state.login ? (
+							<MainLayout>
+								<Home />
+							</MainLayout>
+						) : (
+							<Singin />
+						)
+					}
+				/>
+				<Route
+					path='/register'
+					render={() =>
+						state.login ? (
+							<MainLayout>
+								<Home />
+							</MainLayout>
+						) : (
+							<Register />
+						)
+					}
+				/>
 
-        <Route
-          path="/squad/:id"
-          render={() =>
-            state.login ? (
-              <MinimalLayout>
-                {' '}
-                <SquadDetalle />{' '}
-              </MinimalLayout>
-            ) : (
-              <Singin />
-            )
-          }
-        />
-      </Switch>
-    </BrowserRouter>
-  );
+				<Route
+					path='/squad/:id'
+					render={() =>
+						state.login ? (
+							<MainLayout>
+								{' '}
+								<SquadDetalle />{' '}
+							</MainLayout>
+						) : (
+							<Singin />
+						)
+					}
+				/>
+			</Switch>
+		</BrowserRouter>
+	);
 }
 
 export default App;

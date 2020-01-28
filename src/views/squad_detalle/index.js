@@ -245,7 +245,6 @@ const SquadDetalle = () => {
 
 	return (
 		<div>
-			<Nav />
 			<Link to='/'>
 				<Fab color='primary' aria-label='add'>
 					<ArrowBackIcon />
