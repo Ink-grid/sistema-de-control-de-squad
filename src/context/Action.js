@@ -16,6 +16,14 @@ export const useActions = (state, dispatch) => {
 		dispatch({ type: types.SET_USER, payload: users });
 	};
 
+	const setHoras = horas => {
+		dispatch({ type: types.SET_HORAS, payload: horas });
+	};
+
+	const setPorcentaje = porcen => {
+		dispatch({ type: types.SET_PORCENTAJE, payload: porcen });
+	};
+
 	const setLogin = login => {
 		dispatch({ type: types.SET_LOGIN, payload: login });
 	};
@@ -23,6 +31,8 @@ export const useActions = (state, dispatch) => {
 	return {
 		addTechIfNotInList,
 		setUser,
+		setHoras,
+		setPorcentaje,
 		setLogin
 	};
 };

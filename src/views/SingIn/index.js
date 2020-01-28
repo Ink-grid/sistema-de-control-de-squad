@@ -79,8 +79,9 @@ export default function SignInSide(props) {
 				);
 				actions.setUser(respo.user);
 				actions.setLogin(true);
+				actions.setPorcentaje(100);
+				actions.setHoras(8);
 				setLoading(false);
-				//window.location = '/';
 			} catch (error) {
 				setLoading(false);
 				console.log(error);

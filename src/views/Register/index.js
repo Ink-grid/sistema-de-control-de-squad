@@ -65,7 +65,9 @@ export default function SignUpSide(props) {
 	const [loading, setLoading] = useState(false);
 	const registerUser = async e => {
 		e.preventDefault();
+
 		const form = new FormData(e.target);
+
 		if (form.get('email') && form.get('password')) {
 			setLoading(true);
 			try {
@@ -75,9 +77,8 @@ export default function SignUpSide(props) {
 				);
 
 				const user = auth().currentUser;
-				user.updateProfile({
-					displayName: form.get('name'),
-					photoURL: 'https://example.com/jane-q-user/profile.jpg'
+				await user.updateProfile({
+					displayName: form.get('name')
 				});
 
 				setLoading(false);
