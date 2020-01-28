@@ -15,6 +15,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { List, ListItem, Button, colors } from '@material-ui/core';
 
+import LibraryBooksSharpIcon from '@material-ui/icons/LibraryBooksSharp';
+import HomeIcon from '@material-ui/icons/Home';
+import GroupIcon from '@material-ui/icons/Group';
+import './sidebar.css';
+
+
 const useStyles = makeStyles(theme => ({
 	root: {},
 	item: {
@@ -60,13 +66,13 @@ const SidebarNav = props => {
 	//const [data] = useGet(
 	// `https://pacific-mesa-11643.herokuapp.com/api/users/${state.user.displayName}`
 	//);
-	let data = [];
+	//let data = [];
 
 	const { pages, className, ...rest } = props;
 
 	const classes = useStyles();
-
-	if (data.length === 0) {
+/**
+	if (data.length !== 0) {
 		return (
 			<div style={{ textAlign: 'center' }}>
 				{' '}
@@ -74,9 +80,10 @@ const SidebarNav = props => {
 			</div>
 		);
 	}
-
+ */
 	return (
-		<List {...rest} className={clsx(classes.root, className)}>
+	
+	/*<List {...rest} className={clsx(classes.root, className)}>
 			{data.map(page => (
 				<ListItem className={classes.item} disableGutters key={page.title}>
 					<Button
@@ -89,7 +96,44 @@ const SidebarNav = props => {
 					</Button>
 				</ListItem>
 			))}
-		</List>
+	*/<List {...rest} className={clsx(classes.root, className)}>
+				<ListItem className={classes.item} disableGutters>
+					<Button
+						activeClassName={classes.active}
+						className={classes.button}
+						component={CustomRouterLink}
+						to='/'>
+						<div className={classes.icon}>
+							<HomeIcon/>
+						</div>
+						Squad
+					</Button>
+				</ListItem>
+				<ListItem className={classes.item} disableGutters>
+				<Button
+					activeClassName={classes.active}
+					className={classes.button}
+					component={CustomRouterLink}
+					to='/register'>
+					<div className={classes.icon}>
+						<LibraryBooksSharpIcon/>
+					</div>
+					Detalle Squad
+				</Button>
+			</ListItem>
+			<ListItem className={classes.item} disableGutters>
+			<Button
+				activeClassName={classes.active}
+				className={classes.button}
+				component={CustomRouterLink}
+				to='/nuevo'>
+				<div className={classes.icon}>
+					<GroupIcon/>
+				</div>
+				Report Squad
+			</Button>
+		</ListItem>
+	</List>
 	);
 };
 

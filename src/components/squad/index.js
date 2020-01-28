@@ -58,10 +58,14 @@ export default function CenteredGrid() {
 	const getIniciativa = async () => {
 		const response = await database
 			.ref('model/historial')
-			.orderByChild('fecha')
-			.equalTo(hoyFecha())
-			.once('value');
-		setData(Object.values(response.val() || {}));
+				.orderByChild('fecha')
+				.equalTo(hoyFecha())
+				.once('value');
+
+				setData(Object.values(response.val()||{}))
+
+			console.log('respuesta',response);
+			
 	};
 
 	useEffect(() => {
@@ -77,7 +81,6 @@ export default function CenteredGrid() {
 			<Fab color='primary' aria-label='add'>
 				<AddIcon />
 			</Fab>
-
 			<div style={{ textAlign: 'center', color: 'blue' }}>
 				PORCENTAJE: {state.porcentaje}%
 			</div>

@@ -12,6 +12,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 
+import './topbar.css';
+
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		boxShadow: 'none'
@@ -43,13 +46,14 @@ const Topbar = props => {
 	};
 
 	return (
-		<AppBar {...rest} className={clsx(classes.root, className)}>
+		<div className="topbar">
+			<AppBar {...rest} className={clsx(classes.root, className)}>
 			<Toolbar>
-				<div style={{ width: '195px', textAlign: 'center' }}>
+				<div style={{ width: '195px', textAlign: 'center',height:'20px' }}>
 					<RouterLink to='/'>
 						<img
 							alt='Logo'
-							height='66'
+							height='100'
 							src='https://firebasestorage.googleapis.com/v0/b/ink-grid.appspot.com/o/edicion%20de%20nevado-27.png?alt=media&token=f347cf7d-81e5-4dd2-a150-a76ba01d9e6f'
 							width='115'
 						/>
@@ -79,7 +83,9 @@ const Topbar = props => {
 				</Hidden>
 			</Toolbar>
 		</AppBar>
-	);
+	
+		</div>
+		);
 };
 
 Topbar.propTypes = {
