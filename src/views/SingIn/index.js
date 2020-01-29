@@ -19,6 +19,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import Alert from '@material-ui/lab/Alert';
+
+
 function Copyright() {
 	return (
 		<Typography variant='body2' color='textSecondary' align='center'>
@@ -28,6 +31,7 @@ function Copyright() {
 		</Typography>
 	);
 }
+
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -65,8 +69,11 @@ const useStyles = makeStyles(theme => ({
 export default function SignInSide(props) {
 	const classes = useStyles();
 	const [loading, setLoading] = useState(false);
-	const { state, actions } = useContext(StoreContext);
-
+	const { actions } = useContext(StoreContext);
+	const [alert,setAlert]= useState({
+		state:false,
+		message:null
+	});
 	const singIn = async e => {
 		e.preventDefault();
 		const form = new FormData(e.target);
@@ -77,32 +84,59 @@ export default function SignInSide(props) {
 					form.get('email'),
 					form.get('password')
 				);
+				console.log('RESPO',respo);
 				actions.setUser(respo.user);
 				actions.setLogin(true);
 				actions.setPorcentaje(100);
 				actions.setHoras(8);
 				setLoading(false);
+				console.log('loadinggg',loading);
 			} catch (error) {
+				switch (error.code) {
+					case 'auth/user-not-found':
+						setAlert({state: true, message:'No hay registro de usuario correspondiente a este identificador. El usuario puede haber sido eliminado'})
+						break;
+					case 'auth/wrong-password':
+						setAlert({state:true,message:'La contraseña no es válida o el usuario no tiene una contraseña.'});
+						break;
+					case 'auth/invalid-email':
+						console.log('error',error.code);
+						setAlert({state:true,message:'Email Invalido'});
+						break;
+					case 'auth/too-many-requests':
+						setAlert({state:true,message:'demasiadas solicitudes'})
+						break;
+					default:
+						console.log(error.code);
+					break;
+				}
 				setLoading(false);
-				console.log(error);
-				alert(error);
+				console.log(setLoading);
+
 			}
 		}
 	};
 	return (
 		<Grid container component='main' className={classes.root}>
+			
 			<CssBaseline />
 			<Grid item xs={false} sm={4} md={7} className={classes.image} />
 			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
 				{loading && <LinearProgress />}
 				<div className={classes.paper}>
+				
 					<Avatar className={classes.avatar}>
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component='h1' variant='h5'>
 						Ingresar
 					</Typography>
+
+
 					<form onSubmit={singIn} className={classes.form} noValidate>
+						{alert.state &&
+							<Alert severity="error">{alert.message}</Alert>
+						}
 						<TextField
 							variant='outlined'
 							margin='normal'

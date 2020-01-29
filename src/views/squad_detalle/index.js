@@ -245,13 +245,14 @@ const SquadDetalle = () => {
 
 	return (
 		<div>
-			<Link to='/'>
-				<Fab color='primary' aria-label='add'>
-					<ArrowBackIcon />
-				</Fab>
-			</Link>
-
-			<div className={classes.paper}>
+			<div >
+				<Link to='/' >
+					<Fab color='primary' aria-label='add'style={{marginTop:'25px',marginLeft:'38px'}}>
+						<ArrowBackIcon />
+					</Fab>
+				</Link>
+			</div>
+			<div className={classes.paper} style={{marginTop:'10px'}}>
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>
