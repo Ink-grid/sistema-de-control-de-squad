@@ -10,10 +10,8 @@ import { StoreContext } from '../../context/StoreContext';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-
 import 'typeface-roboto';
-import Typography from '@material-ui/core/Typography'
-
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -37,8 +35,8 @@ const useStyles = makeStyles(theme => ({
 	contenido: {
 		...theme.typography.button,
 		backgroundColor: theme.palette.background.paper,
-		padding: theme.spacing(1),
-	  },
+		padding: theme.spacing(1)
+	}
 }));
 
 export default function CenteredGrid() {
@@ -68,14 +66,13 @@ export default function CenteredGrid() {
 	const getIniciativa = async () => {
 		const response = await database
 			.ref('model/historial')
-				.orderByChild('fecha')
-				.equalTo(hoyFecha())
-				.once('value');
+			.orderByChild('fecha')
+			.equalTo(hoyFecha())
+			.once('value');
 
-				setData(Object.values(response.val()||{}))
+		setData(Object.values(response.val() || {}));
 
-			console.log('respuesta',response);
-			
+		console.log('respuesta', response);
 	};
 
 	//Este metodo se ejecuta al momento de crearse la function principal
@@ -87,79 +84,115 @@ export default function CenteredGrid() {
 		return <div>cargando</div>;
 	}
 	return (
-		
-		<div className={classes.add} style={{marginBottom:'100px'}}>
-			<Fab color='primary' aria-label='add' style={{marginBottom:'20px',marginTop:'10px'}}>
+		<div className={classes.add} style={{ marginBottom: '100px' }}>
+			<Fab
+				color='primary'
+				aria-label='add'
+				style={{ marginBottom: '20px', marginTop: '10px' }}>
 				<AddIcon />
 			</Fab>
-			<div style={{ textAlign: 'center', color: 'blue',marginBottom:'60px' }} >
+			<div style={{ textAlign: 'center', color: 'blue', marginBottom: '30px' }}>
 				PORCENTAJE: {state.porcentaje}%
 			</div>
-			<br></br>
 			<div className={classes.root}>
 				<Grid container spacing={2}>
-					
 					{[
 						{
-							name:"nevado",
-							color:"#388E3C"
+							name: 'nevado',
+							color: '#388E3C'
 						},
 						{
-							name:'programacion',
-							color:'#212121'
+							name: 'programacion',
+							color: '#212121'
 						},
 						{
-							name:'hyper',
-							color:"#FFEB3B"
+							name: 'hyper',
+							color: '#FFEB3B'
 						},
 						{
-							name:'expro',
-							color:'#D32F2F'
+							name: 'expro',
+							color: '#D32F2F'
 						},
 						{
-							name:"in company",
-							color:"#536DFE"
+							name: 'in company',
+							color: '#536DFE'
 						}
-					].map(
-						(intens, index) => {
-							
-							if (data && data.length > 0) {
-								let resul = data.filter(
-									e =>
-										e.iniciativa === intens.name && e.name === state.user.displayName
-								);
-								return (
-									<Grid item xs={4} key={index} >
-										<Link to={resul.length === 1 ? '/' : `/squad/${intens.name}`}>
-											<Paper
-												elevation={3}
-												className={classes.paper}>
-												{resul.length === 1 ? (
-													<div>
-														<div>{resul[0].iniciativa}</div>
-														<div>comprometido: {resul[0].comprometido}</div>
-														<div>involucrado: {resul[0].involucrado}</div>
-													</div>
-												) : (
-													intens
-												)}
-											</Paper>
-										</Link>
-									</Grid>
-								);
-							}
-
+					].map((intens, index) => {
+						if (data && data.length > 0) {
+							let resul = data.filter(
+								e =>
+									e.iniciativa === intens.name &&
+									e.name === state.user.displayName
+							);
 							return (
-								<Grid item xs={6} key={intens} >
-									<Link to={`/squad/${intens.name}`} style={{textDecoration:'none'}}>
-										<Paper elevation={3} className={classes.paper}  style={{background:intens.color}} >
-											<Typography variant="h4" component="h2" style={{color:'white'}} >{intens.name}</Typography>
+								<Grid item xs={4} key={index}>
+									<Link
+										to={resul.length === 1 ? '/' : `/squad/${intens.name}`}
+										style={{ textDecoration: 'none' }}>
+										<Paper
+											elevation={3}
+											className={classes.paper}
+											style={{
+												background: intens.color,
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center'
+											}}>
+											{resul.length === 1 ? (
+												<div>
+													<Typography
+														variant='4'
+														component='h2'
+														style={{ color: 'white' }}>
+														{resul[0].iniciativa}
+													</Typography>
+													<Typography
+														variant='4'
+														component='h5'
+														style={{ color: 'white' }}>
+														comprometido: {resul[0].comprometido}
+													</Typography>
+													<Typography
+														variant='4'
+														component='h5'
+														style={{ color: 'white' }}>
+														involucrado: {resul[0].involucrado}
+													</Typography>
+												</div>
+											) : (
+												<Typography
+													variant='h4'
+													component='h2'
+													style={{ color: 'white' }}>
+													{intens.name}
+												</Typography>
+											)}
 										</Paper>
 									</Link>
 								</Grid>
 							);
 						}
-					)}
+
+						return (
+							<Grid item xs={6} key={index}>
+								<Link
+									to={`/squad/${intens.name}`}
+									style={{ textDecoration: 'none' }}>
+									<Paper
+										elevation={3}
+										className={classes.paper}
+										style={{ background: intens.color }}>
+										<Typography
+											variant='h4'
+											component='h2'
+											style={{ color: 'white' }}>
+											{intens.name}
+										</Typography>
+									</Paper>
+								</Link>
+							</Grid>
+						);
+					})}
 				</Grid>
 			</div>
 		</div>

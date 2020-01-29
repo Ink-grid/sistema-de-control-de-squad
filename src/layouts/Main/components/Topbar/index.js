@@ -14,7 +14,6 @@ import InputIcon from '@material-ui/icons/Input';
 
 import './topbar.css';
 
-
 const useStyles = makeStyles(theme => ({
 	root: {
 		boxShadow: 'none'
@@ -46,46 +45,52 @@ const Topbar = props => {
 	};
 
 	return (
-		<div className="topbar">
+		<div className='topbar'>
 			<AppBar {...rest} className={clsx(classes.root, className)}>
-			<Toolbar>
-				<div style={{ width: '195px', textAlign: 'center',height:'20px' }}>
-					<RouterLink to='/'>
-						<img
-							alt='Logo'
-							height='100'
-							src='https://firebasestorage.googleapis.com/v0/b/ink-grid.appspot.com/o/edicion%20de%20nevado-27.png?alt=media&token=f347cf7d-81e5-4dd2-a150-a76ba01d9e6f'
-							width='115'
-						/>
-					</RouterLink>
-				</div>
-				<div className={classes.flexGrow} />
-				<Hidden mdDown>
-					<IconButton color='inherit'>
-						<Badge
-							badgeContent={notifications.length}
-							color='primary'
-							variant='dot'>
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
-					<IconButton
-						className={classes.signOutButton}
-						color='inherit'
-						onClick={() => logout()}>
-						<InputIcon />
-					</IconButton>
-				</Hidden>
-				<Hidden lgUp>
-					<IconButton color='inherit' onClick={onSidebarOpen}>
-						<MenuIcon />
-					</IconButton>
-				</Hidden>
-			</Toolbar>
-		</AppBar>
-	
+				<Toolbar>
+					<div
+						style={{
+							width: '195px',
+							height: '50px',
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'flex-end'
+						}}>
+						<RouterLink to='/'>
+							<img
+								alt='Logo'
+								height='45'
+								src='https://firebasestorage.googleapis.com/v0/b/squad-35b7f.appspot.com/o/LOGO%20INK%20GRID%20EN%20BLANCO.png?alt=media&token=df49e847-d020-47f1-b941-684a77a03c62'
+								width='70'
+							/>
+						</RouterLink>
+					</div>
+					<div className={classes.flexGrow} />
+					<Hidden mdDown>
+						<IconButton color='inherit'>
+							<Badge
+								badgeContent={notifications.length}
+								color='primary'
+								variant='dot'>
+								<NotificationsIcon />
+							</Badge>
+						</IconButton>
+						<IconButton
+							className={classes.signOutButton}
+							color='inherit'
+							onClick={() => logout()}>
+							<InputIcon />
+						</IconButton>
+					</Hidden>
+					<Hidden lgUp>
+						<IconButton color='inherit' onClick={onSidebarOpen}>
+							<MenuIcon />
+						</IconButton>
+					</Hidden>
+				</Toolbar>
+			</AppBar>
 		</div>
-		);
+	);
 };
 
 Topbar.propTypes = {

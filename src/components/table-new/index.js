@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from 'react';
 import MaterialTable from 'material-table';
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,94 +9,62 @@ import { database } from '../../utils/firebase';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles({
-    table: {
-      minWidth: 550,
-    },
-  });
+	table: {
+		minWidth: 550
+	}
+});
 export default function MaterialTableDemo() {
-    const classes = useStyles();
+	const classes = useStyles();
 
-    const [data, setData] = useState(null);
+	const [data, setData] = useState(null);
 
-    const getDatos = async () => {
-        const res = await database.ref('model/historial').once('value')
-        const array = Object.values(res.val() || {})
-        setData(array)
-    }
-    
-    useEffect(()=> {
-        getDatos()
-    }, [])
+	const getDatos = async () => {
+		const res = await database.ref('model/historial').once('value');
+		const array = Object.values(res.val() || {});
+		setData(array);
+	};
 
-    console.log(data);
-    
+	useEffect(() => {
+		getDatos();
+	}, []);
 
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'Nombre', field: 'name' },
-      { title: 'Rol', field: 'rol' },
-      { title: 'Fecha', field: 'fecha' },
-      { title: 'Hora Inicio', field: 'hora_inicio' },
-      { title: 'Hora Fin', field: 'hora_fin' },
-      { title: 'Hora comprobada', field: 'horas_compro' },
-      { title: 'Hora invocada', field: 'horas_invo' },
-      { title: 'Iniciativa', field: 'iniciativa' },
-      { title: 'Involucrado',field: 'involucrado',},
-    ]
-  });
+	console.log(data);
 
+	const [state, setState] = React.useState({
+		columns: [
+			{ title: 'Iniciativa', field: 'iniciativa' },
+			{ title: 'Rol', field: 'rol' },
+			{ title: 'Nombre', field: 'name' },
+			{ title: 'Comprometido', field: 'comprometido' },
+			{ title: 'Involucrado', field: 'involucrado' },
+			{ title: 'H. Comprometido', field: 'horas_compro' },
+			{ title: 'H. Involucrado', field: 'horas_invo' },
+			{ title: 'H. Inicio', field: 'hora_inicio' },
+			{ title: 'H. Fin', field: 'hora_fin' },
+			{ title: 'Fecha', field: 'fecha' }
+		]
+	});
 
-  if(!data){
-    return(
-        <div className={classes.root} style={{ textAlign: 'center', color: 'blue' }}>
-            <CircularProgress style={{  width:'100px',marginTop:'80px' }} />
-        </div>
-    )
-    
-}
+	if (!data) {
+		return (
+			<div
+				className={classes.root}
+				style={{ textAlign: 'center', color: 'blue' }}>
+				<CircularProgress style={{ width: '100px', marginTop: '80px' }} />
+			</div>
+		);
+	}
 
-  return (
-    <MaterialTable
-    style={{marginTop:'100px'}}
-        columns={state.columns}
-      data={data}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-              setState(prevState => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    />
-  );
+	return (
+		<div style={{ paddingTop: '1em' }}>
+			<MaterialTable
+				columns={state.columns}
+				data={data}
+				options={{
+					exportButton: true
+				}}
+				title='Historial de squads'
+			/>
+		</div>
+	);
 }

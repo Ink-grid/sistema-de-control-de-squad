@@ -5,7 +5,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import MenuItem from '@material-ui/core/MenuItem';
-import Nav from '../../components/Nav/';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -123,7 +122,7 @@ const PORCEN = [
 	}
 ];
 
-const SquadDetalle = () => {
+const SquadDetalle = props => {
 	const { state, actions } = useContext(StoreContext);
 	const classes = useStyles();
 	const [squadname, setSquadname] = useState(null);
@@ -245,14 +244,17 @@ const SquadDetalle = () => {
 
 	return (
 		<div>
-			<div >
-				<Link to='/' >
-					<Fab color='primary' aria-label='add'style={{marginTop:'25px',marginLeft:'38px'}}>
+			<div>
+				<Link to='/'>
+					<Fab
+						color='primary'
+						aria-label='add'
+						style={{ marginTop: '25px', marginLeft: '38px' }}>
 						<ArrowBackIcon />
 					</Fab>
 				</Link>
 			</div>
-			<div className={classes.paper} style={{marginTop:'10px'}}>
+			<div className={classes.paper} style={{ marginTop: '10px' }}>
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>
