@@ -4,14 +4,21 @@ import React, { useEffect, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
-import { database } from '../../utils/firebase';
+import { database,storage} from '../../utils/firebase';
 import AddIcon from '@material-ui/icons/Add';
 import { StoreContext } from '../../context/StoreContext';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-
 import 'typeface-roboto';
 import Typography from '@material-ui/core/Typography';
+
+/* Ventana modal */
+import Modal from '@material-ui/core/Modal';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+/* Sweet Alert */
+import swal from 'sweetalert';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -36,13 +43,111 @@ const useStyles = makeStyles(theme => ({
 		...theme.typography.button,
 		backgroundColor: theme.palette.background.paper,
 		padding: theme.spacing(1)
-	}
+	},
+	paperr:{
+		position: 'absolute',
+		width: 400,
+		height:400,
+		backgroundColor: theme.palette.background.paper,
+		borderRadius: '10px',//Modificaion del borde del modal
+		boxShadow: theme.shadows[5],
+		padding: theme.spacing(2, 4, 3),
+	},
+	titulo:{
+		color:'black',
+		textAlign:'center'
+	},
+	form: {
+		width: '100%', // Fix IE 11 issue.
+		marginTop: theme.spacing(1)
+	},
 }));
 
 export default function CenteredGrid() {
 	const classes = useStyles();
 	const [data, setData] = useState(null);
 	const { state } = useContext(StoreContext);
+	const [open, setOpen] = React.useState(false);
+	const [url,setUrl] = React.useState(null);
+	const [arreglo,setArreglo] = React.useState(null);
+
+	const saveImage = e =>{
+		/*
+			Este evento sintético se reutiliza por motivos de rendimiento. Si está viendo esto, está accediendo a 
+			la propiedad `type` en un evento sintético liberado / anulado. Esto se establece en nulo. 
+			Si debe mantener el evento sintético original, use event.persist (). 
+			Consulte https://fb.me/react-event-pooling para obtener más información.
+		*/
+		e.persist();
+		const storageRef = storage.ref();
+		console.log('REFF',e.target.files);
+		console.log('REF1F',e.target.files[0]);
+		//FileList	File
+
+		const name = Math.random();
+		if(e.target.files && e.target.files[0]){
+			let file = e.target.files[0];
+		const uploadFile = storageRef.child(`pink-grid/${name}`).put(file);
+			uploadFile.then(snap => {
+				snap.ref.getDownloadURL()
+					.then(downloadURL => {
+						setUrl(downloadURL);
+						console.log('URL',downloadURL);
+					})
+			})
+		}else{
+			console.log('ERROR');
+		}
+	}
+
+	const saveData = async e =>{
+
+		e.preventDefault();
+		setOpen(false);
+		const form = new FormData(e.target);
+		console.log(url);
+		const newSquad = {
+			name:form.get('nameSquad'),
+			color:form.get('colorSquad'),
+			image:url
+		}
+
+		try {
+
+			const respo =
+			await swal({
+				title: "¿Estas seguro?",
+				text: "Desea crear un nuevo Squad!",
+				icon: "warning",
+				buttons: true,
+				dangerMode: true,
+			});
+			if(respo){
+				await database.ref('model/nuevo').push(newSquad);
+				const guard =
+					await 		
+					swal("Creado satisfactoriamente", {
+						icon: "success"
+					});					
+				if(guard){			
+					window.location='/';
+				}
+			}
+			
+			//window.location = '/';
+		} catch (error) {
+			alert(error);
+		}
+
+	}
+	
+	const handleOpen = () => {
+	  setOpen(true);
+	}; 
+  
+	const handleClose = () => {
+	  setOpen(false);
+	};
 
 	function addZero(i) {
 		if (i < 10) {
@@ -62,6 +167,17 @@ export default function CenteredGrid() {
 
 		return dd + '/' + mm + '/' + yyyy;
 	}
+
+	const getDatos = async () => {
+		const res = await database.ref('model/nuevo').once('value');
+		const array = Object.values(res.val() || {});
+		setArreglo(array);
+		console.log(array);
+	};
+
+	useEffect(() => {
+		getDatos();
+	}, []);
 
 	const getIniciativa = async () => {
 		const response = await database
@@ -89,35 +205,68 @@ export default function CenteredGrid() {
 				color='primary'
 				aria-label='add'
 				style={{ marginBottom: '20px', marginTop: '10px' }}>
-				<AddIcon />
+				<AddIcon onClick={ handleOpen } />
 			</Fab>
-			<div style={{ textAlign: 'center', color: 'blue', marginBottom: '30px' }}>
+
+			{
+				/* MODAL*/
+			}
+
+			
+				<Modal
+					aria-labelledby="simple-modal-title"
+					aria-describedby="simple-modal-description"
+					open={open}
+					onClose={handleClose}
+				>
+					<div  className={classes.paperr} style={{marginLeft:'500px',marginTop:'120px'}}>
+						<h2 id="simple-modal-title" className={classes.titulo}>Crear squad</h2>
+						<form onSubmit={saveData} id="formm"  className={classes.form} noValidate>
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							id='nameSquad'
+							label='Name Squad'
+							name='nameSquad'
+							autoComplete='nameSquad'
+							autoFocus
+						/>
+						
+						<TextField
+							variant='outlined'
+							margin='normal'
+							required
+							fullWidth
+							id='colorSquad'
+							label='color squad'
+							name='colorSquad'
+							autoComplete='nameSquad'
+							autoFocus
+						/>
+						<input type="file" onChange={saveImage} name="imagen"/>
+						
+							<div>	
+							<br></br>
+							<br></br>
+							<Button type="submit" className={classes.submit} fullWidth variant="contained" color="primary" >
+								Guardar
+							</Button>
+						
+						</div>			
+						</form>	
+					</div>
+					
+				</Modal>
+			
+			
+			<div style={{ textAlign: 'center', color: 'black', marginBottom: '-120px' }}>
 				PORCENTAJE: {state.porcentaje}%
 			</div>
 			<div className={classes.root}>
 				<Grid container spacing={2}>
-					{[
-						{
-							name: 'nevado',
-							color: '#388E3C'
-						},
-						{
-							name: 'programacion',
-							color: '#212121'
-						},
-						{
-							name: 'hyper',
-							color: '#FFEB3B'
-						},
-						{
-							name: 'expro',
-							color: '#D32F2F'
-						},
-						{
-							name: 'in company',
-							color: '#536DFE'
-						}
-					].map((intens, index) => {
+					{arreglo.map((intens, index) => {
 						if (data && data.length > 0) {
 							let resul = data.filter(
 								e =>
@@ -133,7 +282,8 @@ export default function CenteredGrid() {
 											elevation={3}
 											className={classes.paper}
 											style={{
-												background: intens.color,
+												marginTop:'0px',
+												backgroundImage: `url(${intens.image})`,
 												display: 'flex',
 												alignItems: 'center',
 												justifyContent: 'center'
@@ -198,3 +348,6 @@ export default function CenteredGrid() {
 		</div>
 	);
 }
+
+/* MODAL */
+

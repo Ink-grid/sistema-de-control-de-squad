@@ -63,6 +63,8 @@ const useStyles = makeStyles(theme => ({
 export default function SignUpSide(props) {
 	const classes = useStyles();
 	const [loading, setLoading] = useState(false);
+
+	
 	const registerUser = async e => {
 		e.preventDefault();
 

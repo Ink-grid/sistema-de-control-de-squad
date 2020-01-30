@@ -70,12 +70,24 @@ function App() {
 					}
 				/>
 
-				<Route
+<Route
 					path='/detalle'
 					render={() =>
 						state.login ? (
 							<MainLayout>
 								<div style={{marginTop:'100px'}}><h1>Detalle SQUAD</h1></div>
+							</MainLayout>
+						) : (
+								<Singin />
+							)
+					}
+				/>
+				<Route
+					path='/canvas'
+					render={() =>
+						state.login ? (
+							<MainLayout>
+								<div style={{marginTop:'100px'}}><h1>Canvas</h1></div>
 							</MainLayout>
 						) : (
 								<Singin />

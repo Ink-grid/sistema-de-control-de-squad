@@ -15,6 +15,12 @@ import Fab from '@material-ui/core/Fab';
 import { database } from '../../utils/firebase';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+
+/* Sweet Alert */
+import swal from 'sweetalert';
+
+
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		height: '100vh'
@@ -224,16 +230,34 @@ const SquadDetalle = props => {
 		};
 
 		try {
-			await database.ref('model/historial').push(data);
-			actions.setPorcentaje(Porcentage);
-			actions.setHoras(horasinvolucrado);
-			setProgress(false);
-			window.location = '/';
+
+			const respo =
+			await swal({
+				title: "¿Estas seguro?",
+				text: "Desea guardar esta informacion!",
+				icon: "warning",
+				buttons: true,
+				dangerMode: true,
+			});
+			if(respo){
+				await database.ref('model/historial').push(data);
+				actions.setPorcentaje(Porcentage);
+				actions.setHoras(horasinvolucrado);
+				setProgress(false);	
+				const guard =
+					await 		
+					swal("Guardado satisfactoriamente", {
+						icon: "success"
+					});					
+				if(guard){			
+					window.location='/';
+				}
+			}
+			
+			//window.location = '/';
 		} catch (error) {
 			alert(error);
 		}
-
-		console.log(data);
 	};
 
 	useEffect(() => {
