@@ -9,9 +9,9 @@ import SquadDetalle from './views/squad_detalle/';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts/';
 import Singin from './views/SingIn';
 
-/*PRueba */
-import TableExample from '../src/components/table/index'
+
 import TableNewExample from '../src/components/table-new/index'
+import SquadItem from "../src/components/squad-item";
 
 function App() {
 	const { state } = useContext(StoreContext);
@@ -32,11 +32,11 @@ function App() {
 					}
 				/>
 				<Route
-					path='/register'
+					path='/detalle'
 					render={() =>
 						state.login ? (
 							<MainLayout>
-								<Home />
+								<SquadItem />
 							</MainLayout>
 						) : (
 								<Register />
@@ -70,7 +70,7 @@ function App() {
 					}
 				/>
 
-<Route
+				<Route
 					path='/detalle'
 					render={() =>
 						state.login ? (

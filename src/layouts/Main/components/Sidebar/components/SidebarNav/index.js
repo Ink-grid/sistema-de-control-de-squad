@@ -91,7 +91,7 @@ const SidebarNav = props => {
 					activeClassName={classes.active}
 					className={classes.button}
 					component={CustomRouterLink}
-					to='/register'>
+					to='/detalle'>
 					<div className={classes.icon}>
 						<LibraryBooksSharpIcon/>
 					</div>

@@ -20,6 +20,9 @@ import Button from '@material-ui/core/Button';
 /* Sweet Alert */
 import swal from 'sweetalert';
 
+/* */
+import {Select,MenuItem,InputLabel} from '@material-ui/core';
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		height: '550px',
@@ -61,6 +64,9 @@ const useStyles = makeStyles(theme => ({
 		width: '100%', // Fix IE 11 issue.
 		marginTop: theme.spacing(1)
 	},
+	selectEmpty: {
+    	marginTop: theme.spacing(2),
+  	},
 }));
 
 export default function CenteredGrid() {
@@ -70,6 +76,31 @@ export default function CenteredGrid() {
 	const [open, setOpen] = React.useState(false);
 	const [url,setUrl] = React.useState(null);
 	const [arreglo,setArreglo] = React.useState(null);
+
+
+	/* Color state */
+	const [color, setColor] = React.useState('');
+
+
+	const getcolorExa = (name) => {
+			switch (name) {
+				case 'rojo':
+					return '#D32F2F';
+				case 'verde':
+					return '#388E3C';
+				
+				case 'azul':
+					return '#536DFE';
+				
+				case 'amarillo':
+					return '#FFA000';
+				
+				case 'morado':
+					return '#7B1FA2';
+				default:
+					return '#388E3C';
+			}
+	}
 
 	const saveImage = e =>{
 		/*
@@ -100,6 +131,16 @@ export default function CenteredGrid() {
 		}
 	}
 
+	const getDataSqual = async e => {
+		const response = await database
+			.ref('model/historial')
+			.orderByChild('fecha')
+			.equalTo(hoyFecha())
+			.once('value');
+		
+		console.log(response);
+	}
+
 	const saveData = async e =>{
 
 		e.preventDefault();
@@ -108,7 +149,7 @@ export default function CenteredGrid() {
 		console.log(url);
 		const newSquad = {
 			name:form.get('nameSquad'),
-			color:form.get('colorSquad'),
+			color:  getcolorExa(form.get('colorSquad')),
 			image:url
 		}
 
@@ -170,10 +211,14 @@ export default function CenteredGrid() {
 
 	const getDatos = async () => {
 		const res = await database.ref('model/nuevo').once('value');
-		const array = Object.values(res.val() || {});
-		setArreglo(array);
-		console.log(array);
+		if(res.val()){
+			const array = Object.values(res.val() || {});
+			setArreglo(array);
+		}else{
+			setArreglo(['']);
+		}
 	};
+
 
 	useEffect(() => {
 		getDatos();
@@ -187,8 +232,6 @@ export default function CenteredGrid() {
 			.once('value');
 
 		setData(Object.values(response.val() || {}));
-
-		console.log('respuesta', response);
 	};
 
 	//Este metodo se ejecuta al momento de crearse la function principal
@@ -212,7 +255,7 @@ export default function CenteredGrid() {
 				/* MODAL*/
 			}
 
-			
+				
 				<Modal
 					aria-labelledby="simple-modal-title"
 					aria-describedby="simple-modal-description"
@@ -234,27 +277,31 @@ export default function CenteredGrid() {
 							autoFocus
 						/>
 						
-						<TextField
-							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							id='colorSquad'
-							label='color squad'
-							name='colorSquad'
-							autoComplete='nameSquad'
-							autoFocus
-						/>
-						<input type="file" onChange={saveImage} name="imagen"/>
+						<InputLabel id="demo-simple-select-helper-label">Color</InputLabel>
+
+						<Select
+							labelId="demo-simple-select-label"
+							id="demo-simple-select"
+							value={color}
+							name="colorSquad"
+							style={{width:'100%',marginBottom:'15px'}}
+							onChange={(e)=>setColor(e.target.value)}
+							>
+							<MenuItem value="rojo">Rojo</MenuItem>
+							<MenuItem value="verde">Verde</MenuItem>
+							<MenuItem value="azul">Azul</MenuItem>
+							<MenuItem value="morado">Morado</MenuItem>
+							<MenuItem value="amarillo">Amarillo</MenuItem>
+						</Select>
+							{console.log(color)}
+
 						
+						<input type="file" onChange={saveImage} name="imagen" style={{marginBottom:'15px'}}/>
 							<div>	
-							<br></br>
-							<br></br>
-							<Button type="submit" className={classes.submit} fullWidth variant="contained" color="primary" >
-								Guardar
-							</Button>
-						
-						</div>			
+								<Button type="submit" className={classes.submit} fullWidth variant="contained" color="primary" >
+									Guardar
+								</Button>
+							</div>			
 						</form>	
 					</div>
 					
@@ -264,9 +311,10 @@ export default function CenteredGrid() {
 			<div style={{ textAlign: 'center', color: 'black', marginBottom: '-120px' }}>
 				PORCENTAJE: {state.porcentaje}%
 			</div>
-			<div className={classes.root}>
+			<div className={classes.root} style={{marginTop:'100px'}}>
 				<Grid container spacing={2}>
 					{arreglo.map((intens, index) => {
+						
 						if (data && data.length > 0) {
 							let resul = data.filter(
 								e =>
