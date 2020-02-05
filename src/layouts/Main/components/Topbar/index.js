@@ -51,7 +51,7 @@ const Topbar = props => {
 					<div
 						style={{
 							width: '195px',
-							height: '50px',
+							height: '60px',
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'flex-end'

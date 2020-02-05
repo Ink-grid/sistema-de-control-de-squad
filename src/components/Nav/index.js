@@ -21,13 +21,14 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
 	grow: {
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	menuButton: {
 		marginRight: theme.spacing(2)
 	},
 	title: {
 		display: 'none',
+		color:'blue',
 		[theme.breakpoints.up('sm')]: {
 			display: 'block'
 		}

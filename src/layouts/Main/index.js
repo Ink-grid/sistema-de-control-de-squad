@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 		height: '100%',
 		[theme.breakpoints.up('sm')]: {
 			paddingTop: 64
-		}
+		},
 	},
 	shiftContent: {
 		paddingLeft: 240
@@ -45,14 +45,16 @@ const Main = props => {
 
 	const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
-	return (
+	return ( 
 		<div
 			className={clsx({
 				[classes.root]: true,
 				[classes.shiftContent]: isDesktop
 			})}>
 			<Topbar onSidebarOpen={handleSidebarOpen} />
+			
 			<Sidebar
+				style={{ marginTop:'15px'}}
 				onClose={handleSidebarClose}
 				open={shouldOpenSidebar}
 				variant={isDesktop ? 'persistent' : 'temporary'}

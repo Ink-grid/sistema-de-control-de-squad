@@ -97,6 +97,10 @@ export default function CenteredGrid() {
 				
 				case 'morado':
 					return '#7B1FA2';
+				case 'rosado':
+					return '#E91E63';
+				case 'naranja':
+					return '#FF5722'
 				default:
 					return '#388E3C';
 			}
@@ -292,6 +296,8 @@ export default function CenteredGrid() {
 							<MenuItem value="azul">Azul</MenuItem>
 							<MenuItem value="morado">Morado</MenuItem>
 							<MenuItem value="amarillo">Amarillo</MenuItem>
+							<MenuItem value="rosado">Rosado</MenuItem>
+							<MenuItem value="naranja">Naranja</MenuItem>
 						</Select>
 							{console.log(color)}
 
@@ -331,6 +337,7 @@ export default function CenteredGrid() {
 											className={classes.paper}
 											style={{
 												marginTop:'0px',
+												background: intens.color,
 												backgroundImage: `url(${intens.image})`,
 												display: 'flex',
 												alignItems: 'center',
@@ -379,11 +386,12 @@ export default function CenteredGrid() {
 									<Paper
 										elevation={3}
 										className={classes.paper}
-										style={{ background: intens.color }}>
+										style={{ background: 'black' }}>
 										<Typography
 											variant='h4'
 											component='h2'
-											style={{ color: 'white' }}>
+											background={intens.color}
+											style={{ color: 'black' }}>
 											{intens.name}
 										</Typography>
 									</Paper>

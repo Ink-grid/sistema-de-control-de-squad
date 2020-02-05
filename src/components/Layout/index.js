@@ -8,8 +8,8 @@ import Nav from '../Nav/';
 // import Service from '../pages/Services';
 
 const Layout = props => (
-	<div className='Layout'>
-		<Nav />
+	<div className='Layout' >
+		<Nav/>
 		{props.children}
 	</div>
 );

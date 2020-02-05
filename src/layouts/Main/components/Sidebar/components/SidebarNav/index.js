@@ -73,7 +73,7 @@ const SidebarNav = props => {
 
 	return (
 	
-	<List {...rest} className={clsx(classes.root, className)}>
+	<List {...rest} className={clsx(classes.root, className)} >
 				<ListItem className={classes.item} disableGutters>
 					<Button
 						activeClassName={classes.active}
