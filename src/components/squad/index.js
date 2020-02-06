@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
-import { database,storage} from '../../utils/firebase';
+import { database, storage } from '../../utils/firebase';
 import AddIcon from '@material-ui/icons/Add';
 import { StoreContext } from '../../context/StoreContext';
 import Paper from '@material-ui/core/Paper';
@@ -21,9 +21,13 @@ import Button from '@material-ui/core/Button';
 import swal from 'sweetalert';
 
 /* */
-import {Select,MenuItem,InputLabel} from '@material-ui/core';
+import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+	formControl: {
+		margin: theme.spacing(1),
+		width: '100%'
+	},
 	root: {
 		height: '550px',
 		display: 'flex',
@@ -47,26 +51,26 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: theme.palette.background.paper,
 		padding: theme.spacing(1)
 	},
-	paperr:{
+	paperr: {
 		position: 'absolute',
 		width: 400,
-		height:400,
+		height: 400,
 		backgroundColor: theme.palette.background.paper,
-		borderRadius: '10px',//Modificaion del borde del modal
+		borderRadius: '10px', //Modificaion del borde del modal
 		boxShadow: theme.shadows[5],
-		padding: theme.spacing(2, 4, 3),
+		padding: theme.spacing(2, 4, 3)
 	},
-	titulo:{
-		color:'black',
-		textAlign:'center'
+	titulo: {
+		color: 'black',
+		textAlign: 'center'
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
 		marginTop: theme.spacing(1)
 	},
 	selectEmpty: {
-    	marginTop: theme.spacing(2),
-  	},
+		marginTop: theme.spacing(2)
+	}
 }));
 
 export default function CenteredGrid() {
@@ -74,39 +78,38 @@ export default function CenteredGrid() {
 	const [data, setData] = useState(null);
 	const { state } = useContext(StoreContext);
 	const [open, setOpen] = React.useState(false);
-	const [url,setUrl] = React.useState(null);
-	const [arreglo,setArreglo] = React.useState(null);
-
+	const [url, setUrl] = React.useState(null);
+	const [arreglo, setArreglo] = React.useState(null);
+	const inputLabel = React.useRef(null);
 
 	/* Color state */
 	const [color, setColor] = React.useState('');
 
+	const getcolorExa = name => {
+		switch (name) {
+			case 'rojo':
+				return '#D32F2F';
+			case 'verde':
+				return '#388E3C';
 
-	const getcolorExa = (name) => {
-			switch (name) {
-				case 'rojo':
-					return '#D32F2F';
-				case 'verde':
-					return '#388E3C';
-				
-				case 'azul':
-					return '#536DFE';
-				
-				case 'amarillo':
-					return '#FFA000';
-				
-				case 'morado':
-					return '#7B1FA2';
-				case 'rosado':
-					return '#E91E63';
-				case 'naranja':
-					return '#FF5722'
-				default:
-					return '#388E3C';
-			}
-	}
+			case 'azul':
+				return '#536DFE';
 
-	const saveImage = e =>{
+			case 'amarillo':
+				return '#FFA000';
+
+			case 'morado':
+				return '#7B1FA2';
+			case 'rosado':
+				return '#E91E63';
+			case 'naranja':
+				return '#FF5722';
+			default:
+				return '#388E3C';
+		}
+	};
+
+	const saveImage = e => {
 		/*
 			Este evento sintético se reutiliza por motivos de rendimiento. Si está viendo esto, está accediendo a 
 			la propiedad `type` en un evento sintético liberado / anulado. Esto se establece en nulo. 
@@ -115,25 +118,24 @@ export default function CenteredGrid() {
 		*/
 		e.persist();
 		const storageRef = storage.ref();
-		console.log('REFF',e.target.files);
-		console.log('REF1F',e.target.files[0]);
+		console.log('REFF', e.target.files);
+		console.log('REF1F', e.target.files[0]);
 		//FileList	File
 
 		const name = Math.random();
-		if(e.target.files && e.target.files[0]){
+		if (e.target.files && e.target.files[0]) {
 			let file = e.target.files[0];
-		const uploadFile = storageRef.child(`pink-grid/${name}`).put(file);
+			const uploadFile = storageRef.child(`pink-grid/${name}`).put(file);
 			uploadFile.then(snap => {
-				snap.ref.getDownloadURL()
-					.then(downloadURL => {
-						setUrl(downloadURL);
-						console.log('URL',downloadURL);
-					})
-			})
-		}else{
+				snap.ref.getDownloadURL().then(downloadURL => {
+					setUrl(downloadURL);
+					console.log('URL', downloadURL);
+				});
+			});
+		} else {
 			console.log('ERROR');
 		}
-	}
+	};
 
 	const getDataSqual = async e => {
 		const response = await database
@@ -141,57 +143,51 @@ export default function CenteredGrid() {
 			.orderByChild('fecha')
 			.equalTo(hoyFecha())
 			.once('value');
-		
+
 		console.log(response);
-	}
+	};
 
-	const saveData = async e =>{
-
+	const saveData = async e => {
 		e.preventDefault();
 		setOpen(false);
 		const form = new FormData(e.target);
 		console.log(url);
 		const newSquad = {
-			name:form.get('nameSquad'),
-			color:  getcolorExa(form.get('colorSquad')),
-			image:url
-		}
+			name: form.get('nameSquad'),
+			color: getcolorExa(form.get('colorSquad')),
+			image: url
+		};
 
 		try {
-
-			const respo =
-			await swal({
-				title: "¿Estas seguro?",
-				text: "Desea crear un nuevo Squad!",
-				icon: "warning",
+			const respo = await swal({
+				title: '¿Estas seguro?',
+				text: 'Desea crear un nuevo Squad!',
+				icon: 'warning',
 				buttons: true,
-				dangerMode: true,
+				dangerMode: true
 			});
-			if(respo){
+			if (respo) {
 				await database.ref('model/nuevo').push(newSquad);
-				const guard =
-					await 		
-					swal("Creado satisfactoriamente", {
-						icon: "success"
-					});					
-				if(guard){			
-					window.location='/';
+				const guard = await swal('Creado satisfactoriamente', {
+					icon: 'success'
+				});
+				if (guard) {
+					window.location = '/';
 				}
 			}
-			
+
 			//window.location = '/';
 		} catch (error) {
 			alert(error);
 		}
+	};
 
-	}
-	
 	const handleOpen = () => {
-	  setOpen(true);
-	}; 
-  
+		setOpen(true);
+	};
+
 	const handleClose = () => {
-	  setOpen(false);
+		setOpen(false);
 	};
 
 	function addZero(i) {
@@ -215,14 +211,13 @@ export default function CenteredGrid() {
 
 	const getDatos = async () => {
 		const res = await database.ref('model/nuevo').once('value');
-		if(res.val()){
+		if (res.val()) {
 			const array = Object.values(res.val() || {});
 			setArreglo(array);
-		}else{
+		} else {
 			setArreglo(['']);
 		}
 	};
-
 
 	useEffect(() => {
 		getDatos();
@@ -249,78 +244,88 @@ export default function CenteredGrid() {
 	return (
 		<div className={classes.add} style={{ marginBottom: '100px' }}>
 			<Fab
+				onClick={handleOpen}
 				color='primary'
 				aria-label='add'
 				style={{ marginBottom: '20px', marginTop: '10px' }}>
-				<AddIcon onClick={ handleOpen } />
+				<AddIcon />
 			</Fab>
 
-			{
-				/* MODAL*/
-			}
+			{/* MODAL*/}
 
-				
-				<Modal
-					aria-labelledby="simple-modal-title"
-					aria-describedby="simple-modal-description"
-					open={open}
-					onClose={handleClose}
-				>
-					<div  className={classes.paperr} style={{marginLeft:'500px',marginTop:'120px'}}>
-						<h2 id="simple-modal-title" className={classes.titulo}>Crear squad</h2>
-						<form onSubmit={saveData} id="formm"  className={classes.form} noValidate>
-						<TextField
+			<Modal
+				aria-labelledby='simple-modal-title'
+				aria-describedby='simple-modal-description'
+				open={open}
+				onClose={handleClose}>
+				<div
+					className={classes.paperr}
+					style={{ marginLeft: '500px', marginTop: '120px' }}>
+					<h2 id='simple-modal-title' className={classes.titulo}>
+						Crear squad
+					</h2>
+					<form onSubmit={saveData}>
+						<FormControl
+							id='formm'
 							variant='outlined'
-							margin='normal'
-							required
-							fullWidth
-							id='nameSquad'
-							label='Name Squad'
-							name='nameSquad'
-							autoComplete='nameSquad'
-							autoFocus
-						/>
-						
-						<InputLabel id="demo-simple-select-helper-label">Color</InputLabel>
+							className={classes.formControl}
+							noValidate>
+							<TextField
+								variant='outlined'
+								margin='normal'
+								required
+								fullWidth
+								id='nameSquad'
+								label='Nombre'
+								name='nameSquad'
+								autoComplete='nameSquad'
+								autoFocus
+							/>
 
-						<Select
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={color}
-							name="colorSquad"
-							style={{width:'100%',marginBottom:'15px'}}
-							onChange={(e)=>setColor(e.target.value)}
-							>
-							<MenuItem value="rojo">Rojo</MenuItem>
-							<MenuItem value="verde">Verde</MenuItem>
-							<MenuItem value="azul">Azul</MenuItem>
-							<MenuItem value="morado">Morado</MenuItem>
-							<MenuItem value="amarillo">Amarillo</MenuItem>
-							<MenuItem value="rosado">Rosado</MenuItem>
-							<MenuItem value="naranja">Naranja</MenuItem>
-						</Select>
-							{console.log(color)}
+							{/* <InputLabel id='demo-simple-select-outlined-label'>
+							Color
+						</InputLabel> */}
 
-						
-						<input type="file" onChange={saveImage} name="imagen" style={{marginBottom:'15px'}}/>
-							<div>	
-								<Button type="submit" className={classes.submit} fullWidth variant="contained" color="primary" >
+							<Select
+								labelId='demo-simple-select-outlined-label'
+								id='demo-simple-select-outlined'
+								value={color}
+								name='colorSquad'
+								style={{ width: '100%', marginBottom: '15px' }}
+								onChange={e => setColor(e.target.value)}>
+								<MenuItem value='rojo'>Rojo</MenuItem>
+								<MenuItem value='verde'>Verde</MenuItem>
+								<MenuItem value='azul'>Azul</MenuItem>
+								<MenuItem value='morado'>Morado</MenuItem>
+								<MenuItem value='amarillo'>Amarillo</MenuItem>
+								<MenuItem value='rosado'>Rosado</MenuItem>
+								<MenuItem value='naranja'>Naranja</MenuItem>
+							</Select>
+							<br />
+							<br />
+							{/* <input type="file" onChange={saveImage} name="imagen" style={{marginBottom:'15px'}}/> */}
+							<div>
+								<Button
+									type='submit'
+									className={classes.submit}
+									fullWidth
+									variant='contained'
+									color='primary'>
 									Guardar
 								</Button>
-							</div>			
-						</form>	
-					</div>
-					
-				</Modal>
-			
-			
-			<div style={{ textAlign: 'center', color: 'black', marginBottom: '-120px' }}>
+							</div>
+						</FormControl>
+					</form>
+				</div>
+			</Modal>
+
+			<div
+				style={{ textAlign: 'center', color: 'black', marginBottom: '-120px' }}>
 				PORCENTAJE: {state.porcentaje}%
 			</div>
-			<div className={classes.root} style={{marginTop:'100px'}}>
+			<div className={classes.root} style={{ marginTop: '100px' }}>
 				<Grid container spacing={2}>
 					{arreglo.map((intens, index) => {
-						
 						if (data && data.length > 0) {
 							let resul = data.filter(
 								e =>
@@ -336,7 +341,7 @@ export default function CenteredGrid() {
 											elevation={3}
 											className={classes.paper}
 											style={{
-												marginTop:'0px',
+												marginTop: '0px',
 												background: intens.color,
 												backgroundImage: `url(${intens.image})`,
 												display: 'flex',
@@ -406,4 +411,3 @@ export default function CenteredGrid() {
 }
 
 /* MODAL */
-
