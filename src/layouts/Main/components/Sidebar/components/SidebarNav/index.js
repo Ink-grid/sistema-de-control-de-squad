@@ -19,7 +19,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import GroupIcon from '@material-ui/icons/Group';
 import './sidebar.css';
 
-
 const useStyles = makeStyles(theme => ({
 	root: {},
 	item: {
@@ -72,28 +71,27 @@ const SidebarNav = props => {
 	const classes = useStyles();
 
 	return (
-	
-	<List {...rest} className={clsx(classes.root, className)} >
-				<ListItem className={classes.item} disableGutters>
-					<Button
-						activeClassName={classes.active}
-						className={classes.button}
-						component={CustomRouterLink}
-						to='/'>
-						<div className={classes.icon}>
-							<HomeIcon/>
-						</div>
-						Squad
-					</Button>
-				</ListItem>
-				<ListItem className={classes.item} disableGutters>
+		<List {...rest} className={clsx(classes.root, className)}>
+			<ListItem className={classes.item} disableGutters>
+				<Button
+					activeClassName={classes.active}
+					className={classes.button}
+					component={CustomRouterLink}
+					to='/'>
+					<div className={classes.icon}>
+						<HomeIcon />
+					</div>
+					Squad
+				</Button>
+			</ListItem>
+			<ListItem className={classes.item} disableGutters>
 				<Button
 					activeClassName={classes.active}
 					className={classes.button}
 					component={CustomRouterLink}
 					to='/detalle'>
 					<div className={classes.icon}>
-						<LibraryBooksSharpIcon/>
+						<LibraryBooksSharpIcon />
 					</div>
 					Detalle Squad
 				</Button>
@@ -106,13 +104,12 @@ const SidebarNav = props => {
 					component={CustomRouterLink}
 					to='/nuevo'>
 					<div className={classes.icon}>
-						<GroupIcon/>
+						<GroupIcon />
 					</div>
 					Report Squad
 				</Button>
 			</ListItem>
 
-			
 			<ListItem className={classes.item} disableGutters>
 				<Button
 					activeClassName={classes.active}
@@ -120,7 +117,7 @@ const SidebarNav = props => {
 					component={CustomRouterLink}
 					to='/canvas'>
 					<div className={classes.icon}>
-						<GroupIcon/>
+						<GroupIcon />
 					</div>
 					Canvas
 				</Button>
@@ -133,13 +130,12 @@ const SidebarNav = props => {
 					component={CustomRouterLink}
 					to='/whatsapp'>
 					<div className={classes.icon}>
-						<WhatsAppIcon/>
+						<WhatsAppIcon />
 					</div>
-					WhatsApp Masivos
+					WhatsApp
 				</Button>
 			</ListItem>
-
-	</List>
+		</List>
 	);
 };
 
