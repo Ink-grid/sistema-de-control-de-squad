@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 //import { useGet } from '../../../../../../services/useService';
 //import { StoreContext } from '../../../../../../context/StoreContext';
 import { List, ListItem, Button, colors } from '@material-ui/core';
-
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import LibraryBooksSharpIcon from '@material-ui/icons/LibraryBooksSharp';
 import HomeIcon from '@material-ui/icons/Home';
 import GroupIcon from '@material-ui/icons/Group';
@@ -123,6 +123,19 @@ const SidebarNav = props => {
 						<GroupIcon/>
 					</div>
 					Canvas
+				</Button>
+			</ListItem>
+
+			<ListItem className={classes.item} disableGutters>
+				<Button
+					activeClassName={classes.active}
+					className={classes.button}
+					component={CustomRouterLink}
+					to='/whatsapp'>
+					<div className={classes.icon}>
+						<WhatsAppIcon/>
+					</div>
+					WhatsApp Masivos
 				</Button>
 			</ListItem>
 
