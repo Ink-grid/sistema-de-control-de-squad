@@ -21,7 +21,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Alert from '@material-ui/lab/Alert';
 
-
 function Copyright() {
 	return (
 		<Typography variant='body2' color='textSecondary' align='center'>
@@ -31,7 +30,6 @@ function Copyright() {
 		</Typography>
 	);
 }
-
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -70,9 +68,9 @@ export default function SignInSide(props) {
 	const classes = useStyles();
 	const [loading, setLoading] = useState(false);
 	const { actions } = useContext(StoreContext);
-	const [alert,setAlert]= useState({
-		state:false,
-		message:null
+	const [alert, setAlert] = useState({
+		state: false,
+		message: null
 	});
 	const singIn = async e => {
 		e.preventDefault();
@@ -84,47 +82,52 @@ export default function SignInSide(props) {
 					form.get('email'),
 					form.get('password')
 				);
-				console.log('RESPO',respo);
+				console.log('RESPO', respo);
 				actions.setUser(respo.user);
 				actions.setLogin(true);
-				actions.setPorcentaje(100);
-				actions.setHoras(8);
+				// actions.setPorcentaje(100);
+				// actions.setHoras(8);
 				setLoading(false);
-				console.log('loadinggg',loading);
+				console.log('loadinggg', loading);
 			} catch (error) {
 				switch (error.code) {
 					case 'auth/user-not-found':
-						setAlert({state: true, message:'No hay registro de usuario correspondiente a este identificador. El usuario puede haber sido eliminado'})
+						setAlert({
+							state: true,
+							message:
+								'No hay registro de usuario correspondiente a este identificador. El usuario puede haber sido eliminado'
+						});
 						break;
 					case 'auth/wrong-password':
-						setAlert({state:true,message:'La contraseña no es válida o el usuario no tiene una contraseña.'});
+						setAlert({
+							state: true,
+							message:
+								'La contraseña no es válida o el usuario no tiene una contraseña.'
+						});
 						break;
 					case 'auth/invalid-email':
-						console.log('error',error.code);
-						setAlert({state:true,message:'Email Invalido'});
+						console.log('error', error.code);
+						setAlert({ state: true, message: 'Email Invalido' });
 						break;
 					case 'auth/too-many-requests':
-						setAlert({state:true,message:'demasiadas solicitudes'})
+						setAlert({ state: true, message: 'demasiadas solicitudes' });
 						break;
 					default:
 						console.log(error.code);
-					break;
+						break;
 				}
 				setLoading(false);
 				console.log(setLoading);
-
 			}
 		}
 	};
 	return (
 		<Grid container component='main' className={classes.root}>
-			
 			<CssBaseline />
 			<Grid item xs={false} sm={4} md={7} className={classes.image} />
 			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
 				{loading && <LinearProgress />}
 				<div className={classes.paper}>
-				
 					<Avatar className={classes.avatar}>
 						<LockOutlinedIcon />
 					</Avatar>
@@ -132,11 +135,8 @@ export default function SignInSide(props) {
 						Ingresar
 					</Typography>
 
-
 					<form onSubmit={singIn} className={classes.form} noValidate>
-						{alert.state &&
-							<Alert severity="error">{alert.message}</Alert>
-						}
+						{alert.state && <Alert severity='error'>{alert.message}</Alert>}
 						<TextField
 							variant='outlined'
 							margin='normal'

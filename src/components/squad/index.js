@@ -4,13 +4,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
-import { database, storage } from '../../utils/firebase';
+import { database } from '../../utils/firebase';
 import AddIcon from '@material-ui/icons/Add';
 import { StoreContext } from '../../context/StoreContext';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import 'typeface-roboto';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 /* Ventana modal */
 import Modal from '@material-ui/core/Modal';
@@ -21,7 +22,7 @@ import Button from '@material-ui/core/Button';
 import swal from 'sweetalert';
 
 /* */
-import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
+import { Select, MenuItem, FormControl } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -76,11 +77,10 @@ const useStyles = makeStyles(theme => ({
 export default function CenteredGrid() {
 	const classes = useStyles();
 	const [data, setData] = useState(null);
-	const { state } = useContext(StoreContext);
+	const { state, actions } = useContext(StoreContext);
 	const [open, setOpen] = React.useState(false);
-	const [url, setUrl] = React.useState(null);
+	const [url] = React.useState(null);
 	const [arreglo, setArreglo] = React.useState(null);
-	const inputLabel = React.useRef(null);
 
 	/* Color state */
 	const [color, setColor] = React.useState('');
@@ -109,43 +109,43 @@ export default function CenteredGrid() {
 		}
 	};
 
-	const saveImage = e => {
-		/*
-			Este evento sintético se reutiliza por motivos de rendimiento. Si está viendo esto, está accediendo a 
-			la propiedad `type` en un evento sintético liberado / anulado. Esto se establece en nulo. 
-			Si debe mantener el evento sintético original, use event.persist (). 
-			Consulte https://fb.me/react-event-pooling para obtener más información.
-		*/
-		e.persist();
-		const storageRef = storage.ref();
-		console.log('REFF', e.target.files);
-		console.log('REF1F', e.target.files[0]);
-		//FileList	File
+	// const saveImage = e => {
+	// 	/*
+	// 		Este evento sintético se reutiliza por motivos de rendimiento. Si está viendo esto, está accediendo a
+	// 		la propiedad `type` en un evento sintético liberado / anulado. Esto se establece en nulo.
+	// 		Si debe mantener el evento sintético original, use event.persist ().
+	// 		Consulte https://fb.me/react-event-pooling para obtener más información.
+	// 	*/
+	// 	e.persist();
+	// 	const storageRef = storage.ref();
+	// 	console.log('REFF', e.target.files);
+	// 	console.log('REF1F', e.target.files[0]);
+	// 	//FileList	File
 
-		const name = Math.random();
-		if (e.target.files && e.target.files[0]) {
-			let file = e.target.files[0];
-			const uploadFile = storageRef.child(`pink-grid/${name}`).put(file);
-			uploadFile.then(snap => {
-				snap.ref.getDownloadURL().then(downloadURL => {
-					setUrl(downloadURL);
-					console.log('URL', downloadURL);
-				});
-			});
-		} else {
-			console.log('ERROR');
-		}
-	};
+	// 	const name = Math.random();
+	// 	if (e.target.files && e.target.files[0]) {
+	// 		let file = e.target.files[0];
+	// 		const uploadFile = storageRef.child(`pink-grid/${name}`).put(file);
+	// 		uploadFile.then(snap => {
+	// 			snap.ref.getDownloadURL().then(downloadURL => {
+	// 				setUrl(downloadURL);
+	// 				console.log('URL', downloadURL);
+	// 			});
+	// 		});
+	// 	} else {
+	// 		console.log('ERROR');
+	// 	}
+	// };
 
-	const getDataSqual = async e => {
-		const response = await database
-			.ref('model/historial')
-			.orderByChild('fecha')
-			.equalTo(hoyFecha())
-			.once('value');
+	// const getDataSqual = async e => {
+	// 	const response = await database
+	// 		.ref('model/historial')
+	// 		.orderByChild('fecha')
+	// 		.equalTo(hoyFecha())
+	// 		.once('value');
 
-		console.log(response);
-	};
+	// 	console.log(response);
+	// };
 
 	const saveData = async e => {
 		e.preventDefault();
@@ -219,7 +219,19 @@ export default function CenteredGrid() {
 		}
 	};
 
+	const resTarPorcentage = () => {
+		let fecha_actual = hoyFecha();
+		if (!state.fecha) {
+			actions.setFecha(fecha_actual);
+			if (state.fecha !== fecha_actual) {
+				actions.setHoras(8);
+				actions.setPorcentaje(100);
+			}
+		}
+	};
+
 	useEffect(() => {
+		resTarPorcentage();
 		getDatos();
 	}, []);
 
@@ -243,13 +255,46 @@ export default function CenteredGrid() {
 	}
 	return (
 		<div className={classes.add} style={{ marginBottom: '100px' }}>
-			<Fab
-				onClick={handleOpen}
-				color='primary'
-				aria-label='add'
-				style={{ marginBottom: '20px', marginTop: '10px' }}>
-				<AddIcon />
-			</Fab>
+			<Typography
+				component='div'
+				variant='body1'
+				style={{
+					height: 100,
+					width: '100%',
+					bottom: 10,
+					left: 500,
+					position: 'fixed'
+				}}>
+				<Box
+					bgcolor='grey.700'
+					color='white'
+					p={2}
+					position='absolute'
+					top={40}
+					left='40%'
+					zIndex='tooltip'>
+					<div style={{ textAlign: 'center', color: '#ffffff' }}>
+						PORCENTAJE: {state.porcentaje}%
+					</div>
+				</Box>
+			</Typography>
+
+			<Typography
+				component='div'
+				variant='body1'
+				style={{
+					height: 100,
+					width: '100%',
+					bottom: 10,
+					left: 700,
+					position: 'fixed'
+				}}>
+				<Box position='absolute' top={40} left='40%' zIndex='tooltip'>
+					<Fab onClick={handleOpen} color='primary' aria-label='add'>
+						<AddIcon />
+					</Fab>
+				</Box>
+			</Typography>
 
 			{/* MODAL*/}
 
@@ -319,10 +364,6 @@ export default function CenteredGrid() {
 				</div>
 			</Modal>
 
-			<div
-				style={{ textAlign: 'center', color: 'black', marginBottom: '-120px' }}>
-				PORCENTAJE: {state.porcentaje}%
-			</div>
 			<div className={classes.root} style={{ marginTop: '100px' }}>
 				<Grid container spacing={2}>
 					{arreglo.map((intens, index) => {
@@ -351,20 +392,20 @@ export default function CenteredGrid() {
 											{resul.length === 1 ? (
 												<div>
 													<Typography
-														variant='4'
+														variant='h4'
 														component='h2'
 														style={{ color: 'white' }}>
 														{resul[0].iniciativa}
 													</Typography>
 													<Typography
-														variant='4'
-														component='h5'
+														variant='h6'
+														component='h6'
 														style={{ color: 'white' }}>
 														comprometido: {resul[0].comprometido}
 													</Typography>
 													<Typography
-														variant='4'
-														component='h5'
+														variant='h6'
+														component='h6'
 														style={{ color: 'white' }}>
 														involucrado: {resul[0].involucrado}
 													</Typography>
@@ -391,12 +432,12 @@ export default function CenteredGrid() {
 									<Paper
 										elevation={3}
 										className={classes.paper}
-										style={{ background: 'black' }}>
+										style={{ background: intens.color, height: '150px' }}>
 										<Typography
 											variant='h4'
 											component='h2'
 											background={intens.color}
-											style={{ color: 'black' }}>
+											style={{ color: '#ffffff' }}>
 											{intens.name}
 										</Typography>
 									</Paper>

@@ -4,6 +4,7 @@ const initialState = {
 	user: JSON.parse(localStorage.getItem('user')),
 	login: JSON.parse(localStorage.getItem('login')),
 	horas: JSON.parse(localStorage.getItem('horas')),
+	fecha: JSON.parse(localStorage.getItem('fecha')),
 	porcentaje: JSON.parse(localStorage.getItem('porcentaje'))
 };
 
@@ -11,6 +12,7 @@ const types = {
 	SET_USER: 'SET_USER',
 	SET_LOGIN: 'SET_LOGIN',
 	SET_HORAS: 'SET_HORAS',
+	SET_FECHA: 'SET_FECHA',
 	SET_PORCENTAJE: 'SET_PORCENTAJE'
 };
 
@@ -35,6 +37,13 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				horas: action.payload
+			};
+
+		case types.SET_FECHA:
+			localStorage.setItem('fecha', JSON.stringify(action.payload));
+			return {
+				...state,
+				fecha: action.payload
 			};
 
 		case types.SET_PORCENTAJE:
